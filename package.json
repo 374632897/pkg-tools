@@ -1,6 +1,6 @@
 {
   "name": "pkg-tools",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "upgrade/index",
   "dependencies": {
     "chalk": "^2.0.1",

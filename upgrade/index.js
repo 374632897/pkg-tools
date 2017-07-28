@@ -1,24 +1,35 @@
 const fs = require('fs')
-const { join } = require('path')
+const { join, sep } = require('path')
 const chalk = require('chalk')
-const BASE_PATH ="/Users/jason/project/co/"
+
+let BASE_PATH ="/Users/jason/project/co/"
+
+const args = process.argv.slice(2);
+
+if (!args.length || ~['help', '-H', '--help'].indexOf(args[0].trim())) {
+  return console.log(require('./help'));
+}
 
 const getPkg = (moduleName) => join(BASE_PATH, moduleName, 'package.json')
-const [source, dist] = process.argv.slice(2)
+
+let [source, dist] = process.argv.slice(2)
+
+if (!dist) {
+  dist = source;
+  source = process.cwd();
+  BASE_PATH = join(source, '..');
+}
+
+if (dist.split(sep).length === 1) {
+  dist = join(BASE_PATH, dist);
+}
+
+// console.log(source, dist);
+// return;
 
 const [sourcePkg, distPkg] = [source, dist].map(item => require(getPkg(item)))
 
-// const depTypes = ['dependencies', 'peerDependencies', 'devDependencies'];
 const depTypes = ['dependencies', 'devDependencies'];
-
-const depIter = (pkg, cb) => {
-  depTypes.forEach(depType => {
-    if (!pkg[depType]) return;
-    Object.keys(pkg[depType]).map(item => {
-      cb(item, pkg[item]);
-    });
-  })
-}
 
 const deps = depTypes.reduce((acc, current) => {
   if (sourcePkg[current]) {
@@ -44,6 +55,11 @@ depTypes.forEach(type => {
     }
   });
 })
+
+if (sourcePkg.peerDependencies) {
+  distPkg.peerDependencies = sourcePkg.peerDependencies;
+}
+
 fs.writeFile(getPkg(dist), JSON.stringify(distPkg, null, 2), (err) => {
   if (err)  {
     return console.log(chalk.red('写入失败 => '), err)

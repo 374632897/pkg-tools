@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "commander": "^2.11.0"
+  },
+  "name": "tools",
+  "version": "1.0.0",
+  "main": "upgrade-dependencies.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "up": "node ./upgrade/entry"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

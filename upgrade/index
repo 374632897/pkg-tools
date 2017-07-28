@@ -64,6 +64,10 @@ if (compareToPkg.peerDependencies) {
   targetPkg.peerDependencies = compareToPkg.peerDependencies;
 }
 
+if (updateList.length < 3) {
+  return console.log(chalk.red('没有需要更新的依赖'));
+}
+
 console.log(updateList.map(([moduleName, version]) => moduleName + '\t' + version).join('\n'));
 
 const readline = require('readline');
@@ -72,6 +76,7 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
+
 
 rl.question('是否执行版本更新(Y/n) ', (answer) => {
   console.log(answer)

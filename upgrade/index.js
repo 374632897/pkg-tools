@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require('fs')
 const { join, sep, basename } = require('path')
 const chalk = require('chalk')

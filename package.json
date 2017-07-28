@@ -1,13 +1,14 @@
 {
   "dependencies": {
     "chalk": "^2.0.1",
-    "commander": "^2.11.0",
     "left-pad": "^1.1.3",
-    "yargs": "^8.0.2"
   },
   "bin": {
-    "up": "./upgrade/index"
+    "up": "./upgrade/index.js"
   },
+  "files": [
+    "upgrade"
+  ],
   "name": "pkg-tools",
   "version": "1.0.0",
   "main": "upgrade-dependencies.js",
@@ -19,5 +20,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "registory": "http://registry.npmjs.org"
 }

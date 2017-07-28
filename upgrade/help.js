@@ -16,8 +16,11 @@ module.exports = `
 
   ${chalk.green('Usage')}
 
-    ${chalk.green('target')}: 要更新 package.json 的模块
+    ${chalk.green('target')}: 要更新 package.json 的模块， 缺省的时候将会使用当前目录。
 
     ${chalk.green('dist')}:   相对比的目标模块。 在进行更新的时候， 将会以该模块的依赖版本为基准进行更新。
+
+    ${chalk.green('help')}:   显示帮助信息
+
 
 `;

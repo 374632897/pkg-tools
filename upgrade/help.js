@@ -1,10 +1,23 @@
 const chalk = require('chalk')
+const info = (msg) => chalk.green(msg);
 module.exports = `
-${chalk.green('Usage')}: command [target] <dist>
+  ${info('NAME')}
 
-  ${chalk.green('target')}: Who's package.json you wanna update, by default, it equals to the result of process.cwd()
+    up - upgrade package.json
 
-  ${chalk.green('dist')}:   The dist module's package.json you wanna compare to,
-        and update target's package.json's dep version to match it.
+  ${info('SYNOPSIS')}
 
-`
+    up [target] <dist>
+
+  ${info('DESCRIPTION')}
+
+    up 用于在老项目更新的过程当中， 通过指定基准模块， 然后根据该模块的依赖版本来对当前模块的依赖版本进行更新，
+    从而避免每次手工更改版本号可能造成的错误问题。
+
+  ${chalk.green('Usage')}
+
+    ${chalk.green('target')}: 要更新 package.json 的模块
+
+    ${chalk.green('dist')}:   相对比的目标模块。 在进行更新的时候， 将会以该模块的依赖版本为基准进行更新。
+
+`;

@@ -8,7 +8,7 @@
   "bin": {
     "up": "./upgrade/index"
   },
-  "name": "tools",
+  "name": "pkg-tools",
   "version": "1.0.0",
   "main": "upgrade-dependencies.js",
   "devDependencies": {},

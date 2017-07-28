@@ -14,25 +14,22 @@ if (!args.length || isSelect(['help', '-H', '--help'], args[0])) {
 
 const getPkg = (moduleName) => join(BASE_PATH, moduleName, 'package.json')
 
-// let []
+let [target, compareTo] = process.argv.slice(2)
 
-let [source, dist] = process.argv.slice(2)
-
-if (!dist) {
-  dist = source;
-  source = basename(process.cwd());
+if (!compareTo) {
+  compareTo = target;
+  target = basename(process.cwd());
   BASE_PATH = join(process.cwd(), '..');
 }
-[dist, source] = [source, dist]
 
-const [sourcePkg, distPkg] = [source, dist].map(item => require(getPkg(item)))
+const [compareToPkg, targetPkg] = [compareTo, target].map(item => require(getPkg(item)))
 
 const depTypes = ['dependencies', 'devDependencies'];
 
 const deps = depTypes.reduce((acc, current) => {
-  if (sourcePkg[current]) {
-    Object.keys(sourcePkg[current]).map(item => {
-      acc[item] = sourcePkg[current][item]
+  if (compareToPkg[current]) {
+    Object.keys(compareToPkg[current]).map(item => {
+      acc[item] = compareToPkg[current][item]
     });
   }
   return acc;
@@ -51,19 +48,20 @@ const updateList = [
 ];
 
 depTypes.forEach(type => {
-  if (!distPkg[type]) return;
+  if (!targetPkg[type]) return;
   const len = 12;
-  Object.keys(distPkg[type]).map(item => {
-    if (deps[item] && distPkg[type][item] !== deps[item]) {
-      updateList.push(format(item, distPkg[type][item], deps[item]));
-      distPkg[type][item] = deps[item]
+  Object.keys(targetPkg[type]).map(item => {
+    if (deps[item] && targetPkg[type][item] !== deps[item]) {
+      updateList.push(format(item, targetPkg[type][item], deps[item]));
+      targetPkg[type][item] = deps[item]
     }
   });
 })
 
-if (sourcePkg.peerDependencies) {
-  distPkg.peerDependencies = sourcePkg.peerDependencies;
+if (compareToPkg.peerDependencies) {
+  targetPkg.peerDependencies = compareToPkg.peerDependencies;
 }
+
 console.log(updateList.map(([moduleName, version]) => moduleName + '\t' + version).join('\n'));
 
 const readline = require('readline');
@@ -76,16 +74,12 @@ const rl = readline.createInterface({
 rl.question('是否执行版本更新(Y/n) ', (answer) => {
   console.log(answer)
   if (isSelect(['Y', 'y', 'yes', 'YES', 'Yes'], answer)) {
-    console.log('更新吧')
-    return rl.close();
-    fs.writeFile(getPkg(dist), JSON.stringify(distPkg, null, 2), (err) => {
+    fs.writeFile(getPkg(target), JSON.stringify(targetPkg, null, 2), (err) => {
       if (err)  {
         return console.log(chalk.red('写入失败 => '), err)
       }
       console.log('package.json文件已更新')
     })
-  } else {
-    console.info('不更新啊啊')
   }
   rl.close();
 });
